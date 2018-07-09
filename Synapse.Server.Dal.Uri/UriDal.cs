@@ -128,22 +128,9 @@ public partial class UriDal : IControllerDal
 
     void EnsurePaths()
     {
-        //NOT REQUIRED AT THIS POINT OF TIME
-
-        //GetFullPath tests below validate the paths are /complete/ paths.  IsPathRooted returns 'true'
-        //in a few undesriable cases
-
-        //if( Path.GetFullPath( _planPath ) != _planPath )
-        //    _planPath = Utilities.PathCombine( CurrentPath, _planPath, "\\" );
-
-        //if( Path.GetFullPath( _histPath ) != _histPath )
-        //    _histPath = Utilities.PathCombine( CurrentPath, _histPath, "\\" );
-
-        //if( Path.GetFullPath( _splxPath ) != _splxPath )
-        //    _splxPath = Utilities.PathCombine( CurrentPath, _splxPath, "\\" );
-
-        //Directory.CreateDirectory( _planPath );
-        //Directory.CreateDirectory( _histPath );
+        //NOT REQUIRED AT THIS POINT OF TIME SINCE THE PATH 
+        //FORMED IN AWS AND AZURE AUTOMATICALLY CREATES THE 
+        //REQUIRED FOLDER STRUCTURE
     }
 
     void LoadSuplex()

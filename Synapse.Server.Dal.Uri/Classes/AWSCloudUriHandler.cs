@@ -25,73 +25,50 @@ namespace Synapse.Server.Dal.Uri
             awsStorageCredentials
                 = config.CloudStorageCredentials as AWSStorageCredentials;
 
-
             awsClient = new AmazonS3Client(awsStorageCredentials.AccessKey,
                 awsStorageCredentials.Secret,
                 Amazon.RegionEndpoint.GetBySystemName(awsStorageCredentials.AWSRegion));
-
-            
         }
 
         public async Task<List<string>> ListFilesInFolder(string folderName)
         {
             List<string> plans = new List<string>();
-            try
+            ListObjectsV2Request request = new ListObjectsV2Request
             {
-                ListObjectsV2Request request = new ListObjectsV2Request
-                {
-                    MaxKeys = 1000,
-                    BucketName = awsStorageCredentials.BucketName,
-                    Prefix = PlanPrefix + "/" + folderName
-
-                };
-                ListObjectsV2Response response;
-                do
-                {
-                    response = await awsClient.ListObjectsV2Async(request);
-                    foreach (S3Object entry in response.S3Objects)
-                    {
-                        if (entry.Key.Length > request.Prefix.Length)
-                            plans.Add(entry.Key);
-                    }
-                    request.ContinuationToken = response.NextContinuationToken;
-                } while (response.IsTruncated);
-            }
-            catch (Exception ex)
+                MaxKeys = 1000,
+                BucketName = awsStorageCredentials.BucketName,
+                Prefix = PlanPrefix + "/" + folderName
+            };
+            ListObjectsV2Response response;
+            do
             {
-                int t = 0;
-            }
+                response = await awsClient.ListObjectsV2Async(request);
+                foreach (S3Object entry in response.S3Objects)
+                {
+                    if (entry.Key.Length > request.Prefix.Length)
+                        plans.Add(entry.Key);
+                }
+                request.ContinuationToken = response.NextContinuationToken;
+            } while (response.IsTruncated);
             return plans;
         }
         public async Task<string> GetFileInFolder(string folderName, string fileName)
         {
             string text = string.Empty;
-            try
+            GetObjectRequest request = new GetObjectRequest
             {
-                GetObjectRequest request = new GetObjectRequest
-                {
-                    BucketName = awsStorageCredentials.BucketName,
-                    Key = PlanPrefix + "/" + folderName + "/" + fileName
-
-                };
-                using (GetObjectResponse response = await awsClient.GetObjectAsync(request))
-                using (Stream responseStream = response.ResponseStream)
-                using (StreamReader reader = new StreamReader(responseStream))
-                {
-                    string title = response.Metadata["x-amz-meta-title"]; // Assume you have "title" as medata added to the object.
-                    string contentType = response.Headers["Content-Type"];
-                    Console.WriteLine("Object metadata, Title: {0}", title);
-                    Console.WriteLine("Content type: {0}", contentType);
-                    text = reader.ReadToEnd();
-                }
-            }
-            catch (AmazonS3Exception e)
+                BucketName = awsStorageCredentials.BucketName,
+                Key = PlanPrefix + "/" + folderName + "/" + fileName
+            };
+            using (GetObjectResponse response = await awsClient.GetObjectAsync(request))
+            using (Stream responseStream = response.ResponseStream)
+            using (StreamReader reader = new StreamReader(responseStream))
             {
-                Console.WriteLine("Error encountered ***. Message:'{0}' when writing an object", e.Message);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Unknown encountered on server. Message:'{0}' when writing an object", e.Message);
+                string title = response.Metadata["x-amz-meta-title"]; // Assume you have "title" as medata added to the object.
+                string contentType = response.Headers["Content-Type"];
+                Console.WriteLine("Object metadata, Title: {0}", title);
+                Console.WriteLine("Content type: {0}", contentType);
+                text = reader.ReadToEnd();
             }
             return EncryptionHelper.Decrypt(text);
         }

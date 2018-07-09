@@ -16,7 +16,6 @@ namespace Synapse.Server.Dal.Uri
     {
         public UriDalConfig UriDalConfig { get; set; }
         AzureStorageCredentials azureStorageCredentials { get; set; }
-
         public AzureCloudUriHandler(AzureUriDalConfig config)
         {
             this.UriDalConfig = config;
@@ -50,17 +49,11 @@ namespace Synapse.Server.Dal.Uri
         {
             string ConnectionString = string.Format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}", azureStorageCredentials.StorageAccountName, azureStorageCredentials.StorageToken);
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConnectionString);
-
-            // Create the blob client.
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer blobContainer = blobClient.GetContainerReference(azureStorageCredentials.StorageContainerName);
-
-
             CloudBlobDirectory blobDirectory = blobContainer.GetDirectoryReference(folderName);
-
             CloudBlockBlob blockBlob = blobDirectory.GetBlockBlobReference(fileName);
             blockBlob.UploadText(fileContent);
-
             await Task.Delay(1);
         }
 
