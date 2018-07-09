@@ -35,7 +35,6 @@ namespace Synapse.Server.Dal.Uri
         {
             CloudBlobContainer cloudBlobContainer = new CloudBlobContainer(new System.Uri(azureStorageCredentials.StorageUri),
                 new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(azureStorageCredentials.StorageToken));
-            //TODO Vittal Remove this later
             folderName = folderName.Replace("\\", "");
             CloudBlobDirectory blobDirectory = cloudBlobContainer.GetDirectoryReference(folderName);
             CloudBlob blob = blobDirectory.GetBlobReference(fileName);

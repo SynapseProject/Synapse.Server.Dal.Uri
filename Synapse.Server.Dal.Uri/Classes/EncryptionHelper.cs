@@ -159,7 +159,6 @@ namespace Synapse.Server.Dal.Uri.Encryption
                 encoder = new UTF8Encoding();
             }
 
-            //TODO: this is complete brute force and could be optimized later on ...
             private void ConvertUserKey()
             {
                 string convertedKey = string.Empty;
