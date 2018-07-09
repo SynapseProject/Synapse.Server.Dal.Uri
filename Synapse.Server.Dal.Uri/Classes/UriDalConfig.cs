@@ -1,5 +1,4 @@
 ﻿using Synapse.Server.Dal.Enums;
-using System.Configuration;
 
 namespace Synapse.Server.Dal.Uri
 {

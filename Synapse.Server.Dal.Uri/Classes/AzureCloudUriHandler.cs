@@ -2,12 +2,9 @@
 using Microsoft.WindowsAzure.Storage.Blob;
 using Synapse.Server.Dal.Uri.Encryption;
 using Synapse.Server.Dal.Uri.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Synapse.Server.Dal.Uri

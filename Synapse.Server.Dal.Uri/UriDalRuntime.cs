@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-
 using Suplex.Security;
-
 using Synapse.Core;
-using SynapseUtilities=Synapse.Core.Utilities;
-using Synapse.Services;
+using SynapseUtilities = Synapse.Core.Utilities;
 using Synapse.Services.Controller.Dal;
 using Synapse.Core.Utilities;
 
